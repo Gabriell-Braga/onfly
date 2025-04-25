@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: ./onfly-backend
+    container_name: onfly-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./onfly-backend:/var/www
+    working_dir: /var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    environment:
+      DB_REFRESH: ${DB_REFRESH}
+    depends_on:
+      - mysql
+
+  frontend:
+    container_name: onfly-frontend
+    build:
+      context: ./onfly-frontend
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8.0
+    container_name: onfly-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: onfly
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
