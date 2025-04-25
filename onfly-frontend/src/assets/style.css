@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+
+@theme {
+    --font-sans: 'Montserrat', sans-serif;
+    --color-primary-50:  #e6f7ff;
+    --color-primary-100: #bae7ff;
+    --color-primary-200: #91d5ff;
+    --color-primary-300: #69c0ff;
+    --color-primary-400: #40a9ff;
+    --color-primary-500: #1890ff;
+    --color-primary-600: #009efa; /* cor base */
+    --color-primary-700: #007acc;
+    --color-primary-800: #005fa3;
+    --color-primary-900: #004680;
+    --color-primary-950: #002f5e;
+}
+
+body {
+    @apply font-sans;
+}
+
+button{
+    @apply cursor-pointer;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}

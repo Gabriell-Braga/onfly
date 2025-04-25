@@ -6,42 +6,84 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\QueryException;
+use Exception;
 
 class AuthController extends Controller
 {
-
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email',
+                'password' => 'required|string|min:6',
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        // Autenticar automaticamente após registro
-        $token = auth('api')->login($user);
+            $token = auth('api')->login($user);
 
-        return response()->json([
-            'message' => 'Usuário registrado com sucesso.',
-            'access_token' => $token
-        ], 201);
+            return response()->json([
+                'message' => 'Usuário registrado com sucesso.',
+                'access_token' => $token
+            ], 201);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro de validação.',
+                'errors' => $e->errors() // <-- já traz erros individuais por campo
+            ], 422);
+        } catch (QueryException $e) {
+            return response()->json([
+                'message' => 'Erro no banco de dados.',
+                'error' => $e->getMessage()
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Erro inesperado.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        try {
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            $credentials = $request->only('email', 'password');
+
+            if (!$token = auth('api')->attempt($credentials)) {
+                return response()->json([
+                    'message' => 'Credenciais inválidas. Verifique seu e-mail e senha.'
+                ], 401);
+            }
+
+            return response()->json([
+                'message' => 'Login realizado com sucesso.',
+                'access_token' => $token
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro de validação.',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Erro inesperado.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(['access_token' => $token]);
     }
 
     public function me()
