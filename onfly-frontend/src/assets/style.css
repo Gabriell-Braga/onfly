@@ -17,6 +17,12 @@
 
 body {
     @apply font-sans;
+    background-image: url('/bg.png');
+    background-size: cover;
+}
+
+#app{
+    @apply bg-white;
 }
 
 button{

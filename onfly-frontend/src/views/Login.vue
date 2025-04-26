@@ -99,7 +99,7 @@
             email: email.value,
             password: password.value,
         })
-        auth.setToken(data.token)
+        auth.setToken(data.access_token)
         router.push('/dashboard')
     } catch (err) {
         console.error(err)

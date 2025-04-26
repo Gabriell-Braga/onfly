@@ -1,7 +1,7 @@
 <!-- src/components/RouteTransition.vue -->
 <template>
   <transition name="diagonal-slide">
-    <div v-if="active" class="fixed -left-20 -top-80 z-60 pointer-events-none transform rotate-[5deg] bg-primary-600 w-[200vw] h-[200vh]"></div>
+    <div v-if="active" class="fixed -left-20 -top-[500px] z-60 pointer-events-none transform rotate-[5deg] bg-primary-600 w-[200vw] h-[400vh]"></div>
   </transition>
 </template>
 
@@ -42,15 +42,17 @@
     transition: transform 2.5s ease;
   }
   .diagonal-slide-enter-from {
-    transform: translateX(200%) rotate(5deg);
+    transform: translateX(100%) rotate(5deg);
   }
   .diagonal-slide-enter-to {
-    transform: translateX(-200%) rotate(5deg);
+    transform: translateX(-100%) rotate(5deg);
   }
+
+
   .diagonal-slide-leave-from {
-    transform: translateX(-200%) rotate(5deg);
+    transform: translateX(-100%) rotate(5deg);
   }
   .diagonal-slide-leave-to {
-    transform: translateX(-400%) rotate(5deg);
+    transform: translateX(-200%) rotate(5deg);
   }
 </style>
