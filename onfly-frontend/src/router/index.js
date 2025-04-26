@@ -7,7 +7,7 @@ import Dashboard from '@/views/Dashboard.vue'
 
 // Crie as rotas conforme seu app
 const routes = [
-  { path: '/', name: 'Login', component: Login },
+  { path: '/', redirect: '/login' },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
