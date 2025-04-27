@@ -1,5 +1,5 @@
 <template>
-    <header class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] px-6 py-1.5 backdrop-blur-md rounded-2xl shadow-lg flex items-center justify-between bg-primary-600">
+    <header class="fixed top-6 left-1/2 -translate-x-1/2 z-10 w-[95%] px-6 py-1.5 backdrop-blur-md rounded-2xl shadow-lg flex items-center justify-between bg-primary-600">
       <nav class="px-4 lg:px-6 py-4 w-full">
         <div class="flex flex-wrap justify-between items-center">
           <!-- Logo -->
@@ -33,8 +33,8 @@
 
     const handleLogout = async () => {
         try {
-            await auth.logout()
             router.push('/login')
+            await auth.logout()
         } catch (error) {
             console.error('Erro ao deslogar:', error)
         }

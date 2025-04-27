@@ -1,7 +1,7 @@
 <!-- src/components/RouteTransition.vue -->
 <template>
   <transition name="diagonal-slide">
-    <div v-if="active" class="fixed -left-20 -top-[500px] z-60 pointer-events-none transform rotate-[5deg] bg-primary-600 w-[200vw] h-[400vh]"></div>
+    <div v-if="active" class="fixed -left-20 -top-[500px] z-100 pointer-events-none transform rotate-[5deg] bg-primary-600 w-[200vw] h-[400vh]"></div>
   </transition>
 </template>
 

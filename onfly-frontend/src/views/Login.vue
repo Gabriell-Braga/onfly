@@ -103,7 +103,7 @@
         router.push('/dashboard')
     } catch (err) {
         console.error(err)
-        error.value = err.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.';
+        error.value = err.response?.data?.message || err;
     } finally {
         setTimeout(() => {
             loading.value = false

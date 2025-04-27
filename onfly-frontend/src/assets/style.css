@@ -29,9 +29,15 @@ button{
     @apply cursor-pointer;
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s ease;
+input:disabled,
+textarea:disabled,
+select:disabled {
+  @apply !bg-gray-300 !text-gray-400 !border-gray-200 !cursor-not-allowed;
+  opacity: 1 !important;
 }
-.fade-enter-from, .fade-leave-to {
-    opacity: 0;
+
+input:read-only,
+textarea:read-only {
+  @apply !bg-gray-300 !text-gray-500 !border-gray-200 !cursor-default;
+  opacity: 1 !important;
 }
