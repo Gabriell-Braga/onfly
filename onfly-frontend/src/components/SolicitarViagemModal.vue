@@ -197,8 +197,8 @@
             loading.value = true
             // Verificação se cidade está dentro das cidades do IBGE
             const cidadeValida = cidades.value.some(cidade => {
-            const nomeFormatado = `${cidade.nome} - ${cidade.microrregiao.mesorregiao.UF.sigla}`
-            return nomeFormatado.toLowerCase() === filtroCidade.value.toLowerCase()
+                const nomeFormatado = `${cidade.nome} - ${cidade.microrregiao.mesorregiao.UF.sigla}`
+                return nomeFormatado.toLowerCase() === filtroCidade.value.toLowerCase()
             })
 
             if (!cidadeValida) {

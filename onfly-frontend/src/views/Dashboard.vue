@@ -5,6 +5,11 @@
       @close="showModal = false"
       @viagemSolicitada="buscarViagens"
     />
+    <TicketModal
+        :show="showTicket"
+        :id="viagemSelecionada"
+        @close="showTicket = false"
+    />
     <div class="min-h-screen bg-no-repeat bg-cover pt-24 xl:px-32">
       <Header />
       <div class="flex flex-col items-center px-6 py-20 xl:px-32 w-full">
@@ -100,6 +105,8 @@
                         </select>
                     </div>
 
+                    <p v-if="error" class="mt-4 text-sm text-red-600 text-start">{{ error }}</p>
+
                     <!-- Botão -->
                     <div class="flex justify-end w-full">
                         <button
@@ -132,7 +139,7 @@
               <tr
                 v-for="viagem in viagens"
                 :key="viagem.id"
-                class="border-b last:border-0 border-gray-200 hover:bg-gray-100 transition"
+                class="border-b last:border-0 border-gray-200 hover:bg-gray-200 transition"
               >
                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ viagem.id }}</td>
                 <td class="px-6 py-4">{{ viagem.nome_solicitante }}</td>
@@ -160,9 +167,9 @@
                             <select
                                 v-model="viagem.status"
                                 @change="atualizarStatus(viagem.id, viagem.status)"
-                                class="ml-2 rounded-md border-gray-300 shadow-sm text-sm focus:border-primary-500 focus:ring-primary-500 cursor-pointer p-1"
+                                class="ml-2 rounded-md border-gray-300 shadow-sm text-sm focus:border-primary-500 focus:ring-primary-500 outline-primary-600 cursor-pointer p-1"
                             >
-                                <option value="solicitado">Solicitado</option>
+                                <option value="solicitado" disabled>Solicitado</option>
                                 <option value="aprovado">Aprovado</option>
                                 <option value="cancelado">Cancelado</option>
                             </select>
@@ -172,11 +179,9 @@
 
                     </div>
                 </td>
-
-
                 <td class="px-6 py-4 text-right">
                     <button
-                        @click="showModal = true"
+                        @click="abrirTicket(viagem.id)"
                         class="text-primary-600 hover:text-primary-800 font-semibold"
                     >
                         Detalhes
@@ -184,7 +189,7 @@
                 </td>
               </tr>
               <tr v-if="viagens.length === 0">
-                <td colspan="5" class="text-center text-gray-500 px-6 py-6">Nenhuma viagem encontrada.</td>
+                <td colspan="7" class="text-center text-gray-500 px-6 py-6">Nenhuma viagem encontrada.</td>
               </tr>
             </tbody>
           </table>
@@ -200,6 +205,7 @@
     import { useAuthStore } from '@/stores/auth'
     import LoadingOverlay from '@/components/LoadingOverlay.vue'
     import SolicitarViagemModal from '@/components/SolicitarViagemModal.vue'
+    import TicketModal from '@/components/TicketModal.vue'
 
     const auth = useAuthStore()
     
@@ -217,6 +223,8 @@
     const loading = ref(false)
     const selectAberto = ref(false)
     const showModal = ref(false)
+    const showTicket = ref(false)
+    const viagemSelecionada = ref(null)
 
     const buscarViagens = async (filtros = {}) => {
         try {
@@ -271,6 +279,20 @@
     const aplicarFiltros = async () => {
         const filtros = {}
 
+        if(filtroCidade.value) {
+            const cidadeValida = cidades.value.some(cidade => {
+                const nomeFormatado = `${cidade.nome} - ${cidade.microrregiao.mesorregiao.UF.sigla}`
+                return nomeFormatado.toLowerCase() === filtroCidade.value.toLowerCase()
+            })
+
+            if (!cidadeValida) {
+                error.value = 'Cidade inválida. Por favor, selecione uma cidade da lista.'
+                return
+            }
+        }
+
+        error.value = null
+
         if (filtroCidade.value) filtros.destino = filtroCidade.value
         if (dataInicio.value) filtros.data_inicio = dataInicio.value
         if (dataFim.value) filtros.data_fim = dataFim.value
@@ -299,6 +321,11 @@
         } finally {
             loading.value = false
         }
+    }
+
+    const abrirTicket = (viagem) => {
+        viagemSelecionada.value = viagem
+        showTicket.value = true
     }
   
     const formatarData = (dataStr) => {
