@@ -66,6 +66,8 @@ Se quiser iniciar o projeto mantendo os dados anteriores:
 $env:DB_REFRESH="false"; docker-compose up --build
 ```
 
+⚠️ FAÇA SEMPRE O PASSO 4 E 5 APÓS ESTE PASSO, É EXTREMAMENTE NECESSÁRIO TER CONFIGURADO AS VARIÁVEIS DE AMBIENTE PARA O FUNCIONAMENTO DO PROJETO
+
 ### 4. Configure variáveis de ambiente
 
 Abra outro terminal de comandos enquanto o projeto estiver rodando com o Docker e execute o seguinte comando:
