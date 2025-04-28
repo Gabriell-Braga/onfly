@@ -1,21 +1,15 @@
-FROM php:8.1-cli
+FROM php:8.2-cli
 
 WORKDIR /var/www
 
 RUN apt-get update && apt-get install -y \
-    unzip \
-    curl \
-    libzip-dev \
-    zip \
-    git \
-    && docker-php-ext-install pdo pdo_mysql
+    libzip-dev zip unzip \
+    && docker-php-ext-install pdo_mysql
 
-COPY . .
+COPY . /var/www
 
-RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer \
-    && composer install
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY ./entrypoint.sh /var/www/entrypoint.sh
+RUN composer install
 
-ENTRYPOINT ["/var/www/entrypoint.sh"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
