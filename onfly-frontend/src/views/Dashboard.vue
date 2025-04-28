@@ -495,12 +495,19 @@
 
     const isDataIdaPassada = (dataIda) => {
         if (!dataIda) return false
+
         const hoje = new Date()
-        const data = new Date(dataIda)
         hoje.setHours(0, 0, 0, 0)
+
+        const [ano, mes, dia] = dataIda.split('-')
+        const data = new Date(ano, mes - 1, dia)
+
         data.setHours(0, 0, 0, 0)
+
+        console.log(dataIda, 'Data de ida:', data, 'Hoje:', hoje)
         return data < hoje
     }
+
 
   
     const formatarData = (dataStr) => {

@@ -56,7 +56,7 @@
                         </span>
                       </div>
                       <p class="text-xs text-gray-600">{{ notification.message }}</p>
-                      <p class="text-[10px] text-gray-500 mt-1">{{ new Date(notification.sent_at).toLocaleString('pt-BR') }}</p>
+                      <p class="text-[10px] text-gray-500 mt-1">{{ formatarDataBR(notification.sent_at) }}</p>
                     </div>
 
                     <div class="flex flex-col gap-2 ml-4">
@@ -106,6 +106,13 @@
     const viagemSelecionada = ref(null)
     const unreadCount = ref(0)
     let notificationInterval = null
+
+    const formatarDataBR = (dataISO) => {
+      const data = new Date(dataISO)
+      const offset = data.getTimezoneOffset() * 60000
+      const dataLocal = new Date(data.getTime() - offset)
+      return dataLocal.toLocaleString('pt-BR')
+    }
 
     const buscarNotificacoes = async () => {
       try {
