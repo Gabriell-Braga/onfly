@@ -35,7 +35,7 @@ cd onfly
 ### 2. Configure variáveis de ambiente (opcional)
 
 O projeto já possui um arquivo `.env` padrão para funcionamento local.  
-Se quiser alterar configurações (por exemplo, senha do banco de dados), ajuste os arquivos `.env` no diretório `onfly-backend`.
+Se quiser alterar configurações (por exemplo, senha do banco de dados), ajuste os arquivos `.env` nos diretórios `onfly-backend` e `onfly-frontend`.
 
 ### 3. Suba o projeto com Docker
 
@@ -95,7 +95,7 @@ O projeto conta com uma suíte de testes automatizados para garantir a qualidade
 
 ### 📋 Instruções para rodar os testes
 
-1. **Abra o terminal** dentro da pasta raiz do projeto, execute:
+1. **Abra outro terminal** (o projeto precisa estar em execução pelo docker) dentro da pasta raiz do projeto, execute:
 
 ```bash
 docker exec -it onfly-backend bash
