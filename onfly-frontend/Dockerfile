@@ -1,22 +1,15 @@
-FROM node:18-alpine
+# Usa imagem pronta do nginx
+FROM nginx:alpine
 
-# instala um servidor http simples para servir conteúdo estático
-RUN npm install -g http-server
+# Limpa arquivos padrão do nginx
+RUN rm -rf /usr/share/nginx/html/*
 
-# faz da pasta 'app' o diretório atual de trabalho
-WORKDIR /app
+# Copia a build gerada para o nginx
+COPY dist/ /usr/share/nginx/html/
 
-# copia os arquivos 'package.json' e 'package-lock.json' (se disponível)
-COPY package*.json ./
+# (Opcional) Se quiser SPA: copie seu nginx.conf também
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# instala dependências do projeto
-RUN npm install
+EXPOSE 80
 
-# copia arquivos e pastas para o diretório atual de trabalho (pasta 'app')
-COPY . .
-
-# compila a aplicação de produção com minificação
-RUN npm run build
-
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+CMD ["nginx", "-g", "daemon off;"]

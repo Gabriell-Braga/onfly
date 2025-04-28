@@ -362,7 +362,7 @@
             viagens.value = data
             viagensFiltradas.value = data
         } catch (error) {
-            console.error('Erro ao buscar viagens:', error)
+            // console.error('Erro ao buscar viagens:', error)
         }
     }
 

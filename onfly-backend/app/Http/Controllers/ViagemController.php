@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Viagem;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -20,15 +21,19 @@ class ViagemController extends Controller
                 ? Viagem::query()
                 : Viagem::where('user_id', Auth::id());
 
-            if ($request->has('status')) {
+            if ($request->filled('status')) {
                 $query->where('status', $request->status);
             }
 
-            if ($request->has(['data_inicio', 'data_fim'])) {
+            if ($request->filled('data_inicio') && $request->filled('data_fim')) {
                 $query->whereBetween('data_ida', [$request->data_inicio, $request->data_fim]);
+            } elseif ($request->filled('data_inicio')) {
+                $query->where('data_ida', '>=', $request->data_inicio);
+            } elseif ($request->filled('data_fim')) {
+                $query->where('data_ida', '<=', $request->data_fim);
             }
 
-            if ($request->has('destino')) {
+            if ($request->filled('destino')) {
                 $query->where('destino', 'like', '%' . $request->destino . '%');
             }
 
@@ -40,6 +45,7 @@ class ViagemController extends Controller
             ], 500);
         }
     }
+
 
     public function store(Request $request)
     {
@@ -119,7 +125,7 @@ class ViagemController extends Controller
             if (
                 $viagem->status === 'aprovado' &&
                 $request->status === 'cancelado' &&
-                Carbon::parse($viagem->data_ida)->isTodayOrPast()
+                (Carbon::parse($viagem->data_ida)->isToday() || Carbon::parse($viagem->data_ida)->isPast())
             ) {
                 return response()->json([
                     'message' => 'Não é possível cancelar uma viagem aprovada cuja data de ida já passou ou é hoje.'
@@ -128,6 +134,14 @@ class ViagemController extends Controller
 
             $viagem->status = $request->status;
             $viagem->save();
+
+            Notification::create([
+                'user_id' => $viagem->user_id,
+                'viagem_id' => $viagem->id,
+                'title' => 'Atualização no Pedido '.$viagem->id,
+                'message' => 'O status da sua viagem para "' . $viagem->destino . '" foi alterado para "' . ucfirst($request->status) . '".',
+                'sent_at' => now(),
+            ]);
 
             return response()->json($viagem);
         } catch (ModelNotFoundException $e) {

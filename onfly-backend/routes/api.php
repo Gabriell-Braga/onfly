@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ViagemController;
+use App\Http\Controllers\NotificationController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -33,3 +34,8 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/viagens/{id}/status', [ViagemController::class, 'updateStatus']);
 });
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+});
