@@ -45,10 +45,16 @@
                   <div
                     v-for="notification in notifications"
                     :key="notification.id"
-                    class="p-4 hover:bg-gray-50 border-b border-gray-300 last:border-0 flex justify-between items-center"
+                    class="p-4 hover:bg-gray-200 border-b border-gray-300 last:border-0 flex justify-between items-center"
                   >
                     <div class="flex flex-col">
-                      <p class="text-gray-800 font-semibold">{{ notification.title }}</p>
+                      <div class="flex items-center gap-2">
+                        <p class="text-gray-800 font-semibold">{{ notification.title }}</p>
+                        <span class="relative flex size-3" v-if="!notification.read">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+                        </span>
+                      </div>
                       <p class="text-xs text-gray-600">{{ notification.message }}</p>
                       <p class="text-[10px] text-gray-500 mt-1">{{ new Date(notification.sent_at).toLocaleString('pt-BR') }}</p>
                     </div>

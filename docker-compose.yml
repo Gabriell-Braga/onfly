@@ -15,11 +15,14 @@ services:
       - mysql
 
   frontend:
+    image: node:18
     container_name: onfly-frontend
-    build:
-      context: ./onfly-frontend
     ports:
-      - "8080:8080"
+      - "4173:4173"
+    volumes:
+      - ./onfly-frontend:/srv/app
+    working_dir: /srv/app
+    command: sh -c "npm install && npm run build && npm run preview -- --host"
 
   mysql:
     image: mysql:8.0

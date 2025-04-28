@@ -158,8 +158,8 @@ class ViagemTest extends TestCase
 
     public function test_filtro_por_destino_funciona()
     {
-        Viagem::factory()->create(['user_id' => $this->user->id, 'destino' => 'São Paulo']);
-        Viagem::factory()->create(['user_id' => $this->user->id, 'destino' => 'Rio de Janeiro']);
+        Viagem::factory()->create(['user_id' => $this->user->id, 'destino' => 'São Paulo - SP']);
+        Viagem::factory()->create(['user_id' => $this->user->id, 'destino' => 'Rio de Janeiro - RJ']);
 
         $token = auth('api')->login($this->user);
 
@@ -170,4 +170,91 @@ class ViagemTest extends TestCase
         $res->assertStatus(200);
         $this->assertCount(1, $res->json());
     }
+
+    public function test_usuario_visualiza_suas_notificacoes()
+    {
+        $token = auth('api')->login($this->user);
+
+        // cria 2 notificações pro usuário
+        \App\Models\Notification::factory()->count(2)->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->getJson('/api/notifications', [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertGreaterThan(0, count($response->json()));
+    }
+
+
+    public function test_usuario_marca_notificacao_como_lida()
+    {
+        $notification = \App\Models\Notification::factory()->create([
+            'user_id' => $this->user->id,
+            'read' => false,
+        ]);
+
+        $token = auth('api')->login($this->user);
+
+        $response = $this->patchJson("/api/notifications/{$notification->id}/read", [], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(200);
+
+        // Buscar de novo do banco para validar que foi atualizado
+        $this->assertEquals(1, \App\Models\Notification::find($notification->id)->read);
+    }
+
+    public function test_usuario_exclui_uma_notificacao()
+    {
+        $token = auth('api')->login($this->user);
+
+        $viagem = Viagem::factory()->create(['user_id' => $this->user->id]);
+        $notification = \App\Models\Notification::factory()->create([
+            'user_id' => $this->user->id,
+            'viagem_id' => $viagem->id,
+        ]);
+
+        $response = $this->deleteJson("/api/notifications/{$notification->id}", [], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('notifications', ['id' => $notification->id]);
+    }
+
+    public function test_usuario_nao_consegue_cancelar_viagem_passada()
+    {
+        $viagem = Viagem::factory()->create([
+            'user_id' => $this->user->id,
+            'data_ida' => now()->subDay(), // data já passou
+            'status' => 'aprovado'
+        ]);
+
+        $token = auth('api')->login($this->admin);
+
+        $response = $this->patchJson("/api/viagens/{$viagem->id}/status", [
+            'status' => 'cancelado',
+        ], [
+            'Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertStatus(400);
+    }
+
+    public function test_refresh_token_funciona()
+    {
+        $token = auth('api')->login($this->user);
+
+        $response = $this->postJson('/api/refresh', [], [
+            'Authorization' => "Bearer $token",
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['access_token']);
+    }
+
 }
