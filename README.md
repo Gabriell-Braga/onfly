@@ -20,13 +20,13 @@ Mesmo que você não tenha experiência prévia, é só seguir os passos abaixo:
 
 ### 1. Clone o repositório
 
-Abra o terminal e clone o projeto:
+Abra o terminal dentro da pasta desejada e clone o projeto:
 
 ```bash
 git clone https://github.com/Gabriell-Braga/onfly.git
 ```
 
-Depois entre na pasta do projeto:
+Depois entre na pasta do projeto com o seguinte comando:
 
 ```bash
 cd onfly
@@ -39,7 +39,7 @@ Se quiser alterar configurações (por exemplo, senha do banco de dados), ajuste
 
 ### 3. Suba o projeto com Docker
 
-Agora escolha uma das opções abaixo:
+Agora escolha uma das opções de comando abaixo:
 
 #### ➡️ Subir o projeto **zerando o banco de dados**
 
