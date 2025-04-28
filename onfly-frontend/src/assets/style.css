@@ -16,9 +16,11 @@
 }
 
 body {
-    @apply font-sans;
+    @apply font-sans bg-primary-600;
     background-image: url('/bg.png');
     background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
 }
 
 #app{

@@ -340,28 +340,32 @@
     const snackType = ref('') // 'success' ou 'error'
     const showSnack = ref(false)
     let snackTimeout = null
+    let viagensInterval = null
 
-    const buscarViagens = async (filtros = {}) => {
+    const filtros = ref({
+        destino: '',
+        data_inicio: '',
+        data_fim: '',
+        status: ''
+    })
+
+
+    const buscarViagens = async () => {
         try {
-            LoadingTable.value = true
-
             const token = localStorage.getItem('token')
-
             const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/viagens`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-                params: filtros,
+                params: filtros.value,
             })
-
             viagens.value = data
             viagensFiltradas.value = data
         } catch (error) {
             console.error('Erro ao buscar viagens:', error)
-        } finally {
-            LoadingTable.value = false
         }
     }
+
 
     const ordenarPor = (campo) => {
         if (campoOrdenacao.value === campo) {
@@ -416,14 +420,13 @@
 
     // Aplicar filtros
     const aplicarFiltros = async () => {
-        const filtros = {}
+        LoadingTable.value = true
 
         if(filtroCidade.value) {
             const cidadeValida = cidades.value.some(cidade => {
                 const nomeFormatado = `${cidade.nome} - ${cidade.microrregiao.mesorregiao.UF.sigla}`
                 return nomeFormatado.toLowerCase() === filtroCidade.value.toLowerCase()
             })
-
             if (!cidadeValida) {
                 error.value = 'Cidade inválida. Por favor, selecione uma cidade da lista.'
                 return
@@ -432,12 +435,17 @@
 
         error.value = null
 
-        if (filtroCidade.value) filtros.destino = filtroCidade.value
-        if (dataInicio.value) filtros.data_inicio = dataInicio.value
-        if (dataFim.value) filtros.data_fim = dataFim.value
-        if (status.value) filtros.status = status.value
+        filtros.value = {
+            destino: filtroCidade.value || '',
+            data_inicio: dataInicio.value || '',
+            data_fim: dataFim.value || '',
+            status: status.value || ''
+        }
 
-        await buscarViagens(filtros)
+        campoOrdenacao.value = 'id'
+        ordemAscendente.value = true
+        await buscarViagens()
+        LoadingTable.value = false
     }
 
     const atualizarStatus = async (id, novoStatus) => {
@@ -509,10 +517,14 @@
 
     onMounted(() => {
         document.addEventListener('click', fecharSelectAoClicarFora)
+        viagensInterval = setInterval(() => {
+            buscarViagens()
+        }, 10000)
     })
 
     onUnmounted(() => {
         document.removeEventListener('click', fecharSelectAoClicarFora)
+        clearInterval(viagensInterval)
     })
     
     const loadData = async () => {
