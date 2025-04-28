@@ -123,6 +123,57 @@ docker-compose down
 
 <br>
 
+## 🛫 Funcionamento do Sistema
+
+O projeto é uma plataforma de **gestão de pedidos de viagem corporativa**.  
+Funciona de maneira simples, intuitiva e segura.
+
+### 👤 Acesso Administrativo
+
+O sistema já possui um **usuário administrador** criado automaticamente para facilitar o acesso inicial:
+
+| Função  | Informação          |
+|---------|---------------------|
+| E-mail  | `admin@onfly.com`   |
+| Senha   | `admin123`          |
+
+✅ Este usuário possui **acesso completo** às funcionalidades administrativas, como aprovação e cancelamento de pedidos de viagem.
+
+### 🔄 Fluxo Básico de Utilização
+
+1. **Login:**
+   - O usuário acessa a tela de login e informa suas credenciais (e-mail e senha).
+   - Após autenticação, o token JWT é armazenado para proteger o acesso às rotas internas.
+
+2. **Registro de Novos Usuários:**
+   - O sistema permite que novos usuários se cadastrem criando sua própria conta.
+   - Para isso, basta acessar a opção de registro e preencher: nome, e-mail e senha.
+   - Após o cadastro, o usuário já pode realizar login normalmente para criar e gerenciar seus pedidos de viagem.
+
+3. **Criação de Pedidos de Viagem:**
+   - Usuários autenticados podem criar novos pedidos de viagem através de um formulário dedicado.
+   - Cada pedido inclui: nome do solicitante, destino, data de ida, data de volta e status inicial ("Solicitado").
+   - Os campos do formulário possuem validações obrigatórias para garantir o preenchimento correto.
+
+4. **Visualização, Filtros e Ordenação:**
+   - Os pedidos são listados em uma **tabela interativa**, que permite aplicar filtros por **status** (solicitado, aprovado, cancelado), **período** (faixa de datas) e **destino**.
+   - A tabela também permite **ordenar** os dados clicando nos cabeçalhos das colunas (como nome, destino ou data).
+   - Essa interação facilita a busca e a organização dos pedidos, tornando a navegação rápida e eficiente.
+
+5. **Atualização de Status:**
+   - Um administrador pode aprovar ou cancelar pedidos diretamente pela tabela.
+   - Ao atualizar o status de um pedido, uma notificação automática é gerada e enviada para o usuário que fez o pedido.
+
+6. **Notificações:**
+   - O sistema realiza **verificações periódicas** para exibir novas notificações de forma automática, informando o usuário sobre aprovações ou cancelamentos de suas viagens.
+
+7. **Responsividade e Experiência do Usuário:**
+   - A plataforma é totalmente responsiva, adaptando-se perfeitamente a celulares, tablets e desktops.
+   - Foram implementadas animações de transição entre telas, animações no cabeçalho ao scrollar, animações de ping para novos alertas e spinners de carregamento, proporcionando uma experiência moderna, agradável e intuitiva.
+
+
+<br>
+
 ## 🧪 Como rodar os testes unitários do Back-end
 
 O projeto conta com uma suíte de testes automatizados para garantir a qualidade e a confiabilidade das principais funcionalidades da API.
@@ -187,56 +238,6 @@ Os testes cobrem as funcionalidades mais importantes do sistema de viagens:
 
 ✅ Com essa bateria de testes, garantimos que a aplicação está funcionando corretamente em seus principais fluxos de autenticação, registro de pedidos, notificações e regras de permissão.  
 ✅ Também asseguramos que erros críticos de segurança (como acesso não autorizado) estão sendo tratados.
-
-<br>
-
-## 🛫 Funcionamento do Sistema
-
-O projeto é uma plataforma de **gestão de pedidos de viagem corporativa**.  
-Funciona de maneira simples, intuitiva e segura.
-
-### 👤 Acesso Administrativo
-
-O sistema já possui um **usuário administrador** criado automaticamente para facilitar o acesso inicial:
-
-| Função  | Informação          |
-|---------|---------------------|
-| E-mail  | `admin@onfly.com`   |
-| Senha   | `admin123`          |
-
-✅ Este usuário possui **acesso completo** às funcionalidades administrativas, como aprovação e cancelamento de pedidos de viagem.
-
-### 🔄 Fluxo Básico de Utilização
-
-1. **Login:**
-   - O usuário acessa a tela de login e informa suas credenciais (e-mail e senha).
-   - Após autenticação, o token JWT é armazenado para proteger o acesso às rotas internas.
-
-2. **Registro de Novos Usuários:**
-   - O sistema permite que novos usuários se cadastrem criando sua própria conta.
-   - Para isso, basta acessar a opção de registro e preencher: nome, e-mail e senha.
-   - Após o cadastro, o usuário já pode realizar login normalmente para criar e gerenciar seus pedidos de viagem.
-
-3. **Criação de Pedidos de Viagem:**
-   - Usuários autenticados podem criar novos pedidos de viagem através de um formulário dedicado.
-   - Cada pedido inclui: nome do solicitante, destino, data de ida, data de volta e status inicial ("Solicitado").
-   - Os campos do formulário possuem validações obrigatórias para garantir o preenchimento correto.
-
-4. **Visualização, Filtros e Ordenação:**
-   - Os pedidos são listados em uma **tabela interativa**, que permite aplicar filtros por **status** (solicitado, aprovado, cancelado), **período** (faixa de datas) e **destino**.
-   - A tabela também permite **ordenar** os dados clicando nos cabeçalhos das colunas (como nome, destino ou data).
-   - Essa interação facilita a busca e a organização dos pedidos, tornando a navegação rápida e eficiente.
-
-5. **Atualização de Status:**
-   - Um administrador pode aprovar ou cancelar pedidos diretamente pela tabela.
-   - Ao atualizar o status de um pedido, uma notificação automática é gerada e enviada para o usuário que fez o pedido.
-
-6. **Notificações:**
-   - O sistema realiza **verificações periódicas** para exibir novas notificações de forma automática, informando o usuário sobre aprovações ou cancelamentos de suas viagens.
-
-7. **Responsividade e Experiência do Usuário:**
-   - A plataforma é totalmente responsiva, adaptando-se perfeitamente a celulares, tablets e desktops.
-   - Foram implementadas animações de transição entre telas, animações no cabeçalho ao scrollar, animações de ping para novos alertas e spinners de carregamento, proporcionando uma experiência moderna, agradável e intuitiva.
 
 <br>
 
