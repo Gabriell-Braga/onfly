@@ -39,11 +39,15 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.error('Erro ao fazer logout:', err)
       } finally {
-        this.token = ''
-        this.user = null
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
+        this.clearData()
       }
+    },
+
+    clearData() {
+      this.token = ''
+      this.user = null
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
     },
 
     async fetchUser() {
@@ -73,16 +77,22 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /** 🔥 INTERCEPTOR AUTOMÁTICO 🔥 */
     configurarInterceptor() {
       axios.interceptors.response.use(
         response => response,
         async error => {
           const originalRequest = error.config
-
+    
           if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            // Se o erro foi no refreshToken, já desloga
+            if (originalRequest.url.includes('/refresh')) {
+              this.clearData()
+              window.location.href = '/login'
+              return Promise.reject(error)
+            }
+    
             originalRequest._retry = true
-
+    
             try {
               await this.refreshToken()
               originalRequest.headers['Authorization'] = `Bearer ${this.getToken()}`
@@ -90,12 +100,13 @@ export const useAuthStore = defineStore('auth', {
             } catch (refreshError) {
               await this.logout()
               window.location.href = '/login'
+              return Promise.reject(refreshError)
             }
           }
-
+    
           return Promise.reject(error)
         }
       )
-    }
+    }    
   },
 })
