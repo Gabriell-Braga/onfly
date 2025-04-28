@@ -130,6 +130,7 @@
     import axios from 'axios'
     import { useAuthStore } from '@/stores/auth'
     import LoadingOverlay from '@/components/LoadingOverlay.vue'
+    import { watch } from 'vue'
 
     const error = ref(null)
     const success = ref(false)
@@ -153,9 +154,15 @@
     const auth = useAuthStore()
     const outraPessoa = ref(false)
 
-    onMounted(() => {
-        novaViagem.value.nomeSolicitante = auth.getUser()?.name || '';
-    })
+    watch(
+        () => auth.user, 
+        (novoUser) => {
+            if (novoUser && !novaViagem.value.nomeSolicitante) {
+                novaViagem.value.nomeSolicitante = novoUser.name
+            }
+        },
+        { immediate: true }
+    )
 
     const cidades = ref([])
     const filtroCidade = ref('')

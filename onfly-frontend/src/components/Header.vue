@@ -1,5 +1,12 @@
 <template>
-    <header class="fixed top-6 left-1/2 -translate-x-1/2 z-10 w-[95%] px-6 py-1.5 backdrop-blur-md rounded-2xl shadow-lg flex items-center justify-between bg-primary-600">
+    <LoadingOverlay :show="loading" />
+    <div class="w-full flex items-center justify-center fixed left-0 top-0 z-10">
+      <header
+        :class="[
+          'fixed px-6 py-1.5 backdrop-blur-md shadow-lg flex items-center justify-between bg-primary-600 transition-all duration-500 ease-in-out',
+          isScrolled ? 'top-0 w-full translate-x-0 rounded-none px-8' : 'rounded-2xl w-[95%] top-6'
+        ]"
+      >
       <nav class="px-4 lg:px-6 py-4 w-full">
         <div class="flex flex-wrap justify-between items-center">
           <!-- Logo -->
@@ -22,23 +29,45 @@
         </div>
       </nav>
     </header>
+  </div>
 </template>
   
 <script setup>
+    import { ref, onMounted, onUnmounted } from 'vue'
     import { useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/auth'
+    import LoadingOverlay from '@/components/LoadingOverlay.vue'
 
     const router = useRouter()
     const auth = useAuthStore()
+    const loading = ref(false)
+    const isScrolled = ref(false)
+
+    const handleScroll = () => {
+      isScrolled.value = window.scrollY > 10 // Quando rolar mais de 10px
+      console.log('isScrolled:', window.scrollY)
+    }
 
     const handleLogout = async () => {
         try {
-            router.push('/login')
+            loading.value = true
             await auth.logout()
+            router.push('/login')
         } catch (error) {
             console.error('Erro ao deslogar:', error)
+            router.push('/login')
+        } finally {
+            loading.value = false
         }
     }
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll)
+    })
 </script>
 
   

@@ -1,6 +1,6 @@
 <template>
     <LoadingOverlay :show="loading" />
-    <div class="flex min-h-full w-full justify-center xl:justify-between items-center">
+    <div class="flex min-h-lvh w-full justify-center xl:justify-between items-center">
       <div class="flex h-full w-4/5 flex-col justify-center items-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
           <img class="h-20 w-auto" src="/logo-onfly.webp" alt="Onfly Logo" />

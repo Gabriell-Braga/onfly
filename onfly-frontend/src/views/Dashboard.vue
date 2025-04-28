@@ -16,21 +16,21 @@
         <div class="flex flex-col md:flex-row justify-center md:justify-between items-center md:items-end gap-10 mb-10 w-full">
             <!-- Saudação -->
             <div class="w-full xl:w-2/5 text-start mb-6 xl:mb-0">
-                <h1 class="text-6xl font-bold text-primary-700 mb-2">
-                    {{ auth.isAdmin() ? 'Painel Administrativo' : 'Minhas Viagens' }}
+                <h1 class="text-5xl xl:text-6xl font-bold text-primary-700 mb-2">
+                    {{ isAdmin ? 'Painel Administrativo' : 'Minhas Viagens' }}
                 </h1>
 
                 <p class="text-base text-gray-600 mb-8 mt-10">
-                    Olá, <b>{{ auth.getUser()?.name || 'usuário' }}!</b> 👋<br />
-                    <span v-if="auth.isAdmin()">
-                    Aqui você pode gerenciar todas as viagens solicitadas pelos usuários, acompanhar seus status e aprovar ou cancelar pedidos diretamente. Utilize os filtros para encontrar viagens específicas e agilizar o processo de aprovação.
+                    Olá, <b>{{ nomeUsuario || 'usuário' }}!</b> 👋<br />
+                    <span v-if="isAdmin">
+                        Aqui você pode gerenciar todas as viagens solicitadas pelos usuários, acompanhar seus status e aprovar ou cancelar pedidos diretamente. Utilize os filtros para encontrar viagens específicas e agilizar o processo de aprovação.
                     </span>
                     <span v-else>
-                    Aqui você pode visualizar suas viagens solicitadas, acompanhar o status de aprovação e gerenciar seus pedidos de forma simples e rápida. Utilize os filtros para encontrar viagens específicas ou planejar sua próxima jornada.
+                        Aqui você pode visualizar suas viagens solicitadas, acompanhar o status de aprovação e gerenciar seus pedidos de forma simples e rápida. Utilize os filtros para encontrar viagens específicas ou planejar sua próxima jornada.
                     </span>
                 </p>
 
-                <div v-if="!auth.isAdmin()" class="flex justify-start mt-10">
+                <div v-if="!isAdmin" class="flex justify-start mt-10">
                     <button
                     @click="showModal = true"
                     class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
@@ -126,18 +126,91 @@
           <table class="min-w-full text-sm text-left text-gray-800">
             <thead class="uppercase text-xs text-primary-50 border-b border-primary-600 bg-primary-600">
               <tr>
-                <th scope="col" class="px-6 py-3">ID</th>
-                <th scope="col" class="px-6 py-3">Solicitante</th>
-                <th scope="col" class="px-6 py-3">Destino</th>
-                <th scope="col" class="px-6 py-3">Data Ida</th>
-                <th scope="col" class="px-6 py-3">Data Volta</th>
-                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3 cursor-pointer select-none hover:underline" @click="ordenarPor('id')">
+                    <div class="flex items-center gap-1">
+                        ID
+                        <span v-if="campoOrdenacao === 'id'">
+                            <svg v-if="ordemAscendente" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3 cursor-pointer select-none hover:underline" @click="ordenarPor('nome_solicitante')">
+                    <div class="flex items-center gap-1">
+                        Solicitante
+                        <span v-if="campoOrdenacao === 'nome_solicitante'">
+                            <svg v-if="ordemAscendente" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3 cursor-pointer select-none hover:underline" @click="ordenarPor('destino')">
+                    <div class="flex items-center gap-1">
+                        Destino
+                        <span v-if="campoOrdenacao === 'destino'">
+                            <svg v-if="ordemAscendente" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3 cursor-pointer select-none hover:underline" @click="ordenarPor('data_ida')">
+                    <div class="flex items-center gap-1">
+                        Data Ida
+                        <span v-if="campoOrdenacao === 'data_ida'">
+                            <svg v-if="ordemAscendente" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3 cursor-pointer select-none hover:underline" @click="ordenarPor('data_volta')">
+                    <div class="flex items-center gap-1">
+                        Data Volta
+                        <span v-if="campoOrdenacao === 'data_volta'">
+                            <svg v-if="ordemAscendente" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3 cursor-pointer select-none hover:underline" @click="ordenarPor('status')">
+                    <div class="flex items-center gap-1">
+                        Status
+                        <span v-if="campoOrdenacao === 'status'">
+                            <svg v-if="ordemAscendente" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+                </th>
                 <th scope="col" class="px-6 py-3 text-right">Ação</th>
               </tr>
             </thead>
             <tbody>
               <tr
                 v-for="viagem in viagens"
+                v-if="!LoadingTable"
                 :key="viagem.id"
                 class="border-b last:border-0 border-gray-200 hover:bg-gray-200 transition"
               >
@@ -163,11 +236,12 @@
                             ></span>
                         </span>
 
-                        <div v-if="auth.isAdmin()" class="flex items-center">
+                        <div v-if="isAdmin" class="flex items-center">
                             <select
                                 v-model="viagem.status"
                                 @change="atualizarStatus(viagem.id, viagem.status)"
-                                class="ml-2 rounded-md border-gray-300 shadow-sm text-sm focus:border-primary-500 focus:ring-primary-500 outline-primary-600 cursor-pointer p-1"
+                                :disabled="isDataIdaPassada(viagem.data_ida)"
+                                class="ml-2 rounded-md border-gray-300 shadow-sm text-sm focus:border-primary-500 focus:ring-primary-500 outline-primary-600 cursor-pointer p-1 disabled:cursor-not-allowed disabled:bg-gray-100"
                             >
                                 <option value="solicitado" disabled>Solicitado</option>
                                 <option value="aprovado">Aprovado</option>
@@ -188,18 +262,39 @@
                     </button>
                 </td>
               </tr>
-              <tr v-if="viagens.length === 0">
+              <tr v-if="viagens.length === 0 && !LoadingTable">
                 <td colspan="7" class="text-center text-gray-500 px-6 py-6">Nenhuma viagem encontrada.</td>
+              </tr>
+              <tr v-if="LoadingTable">
+                <td colspan="7" class="text-center text-gray-500 px-6 py-6">
+                    <div class="flex justify-center items-center min-h-[50px]">
+                        <div class="relative w-10 h-10">
+                            <!-- Anel base (claro) -->
+                            <div class="absolute inset-0 rounded-full border-5 border-blue-200"></div>
+                            <!-- Anel giratório (escuro) -->
+                            <div class="absolute inset-0 rounded-full border-5 border-primary-600 border-t-transparent animate-spin"></div>
+                        </div>
+                    </div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+    <div
+    v-if="showSnack"
+    :class="[
+        'fixed bottom-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-md shadow-lg text-white text-sm text-center font-semibold transition-all duration-300 z-50',
+        snackType === 'success' ? 'bg-blue-600' : 'bg-red-600'
+    ]"
+    >
+        {{ snackMessage }}
+    </div>
 </template>
   
 <script setup>
-    import { ref, onMounted, onUnmounted } from 'vue'
+    import { ref, onMounted, onUnmounted, watch } from 'vue'
     import Header from '@/components/Header.vue'
     import axios from 'axios'
     import { useAuthStore } from '@/stores/auth'
@@ -208,6 +303,19 @@
     import TicketModal from '@/components/TicketModal.vue'
 
     const auth = useAuthStore()
+    const nomeUsuario = ref('')
+    const isAdmin = ref(false)
+
+    watch(
+        () => auth.user,
+        (novoUser) => {
+            if (novoUser) {
+                nomeUsuario.value = novoUser.name
+                isAdmin.value = novoUser.is_admin === true
+            }
+        },
+        { immediate: true }
+    )
     
     // dados
     const viagens = ref([])
@@ -225,10 +333,17 @@
     const showModal = ref(false)
     const showTicket = ref(false)
     const viagemSelecionada = ref(null)
+    const LoadingTable = ref(false)
+    const campoOrdenacao = ref('id')
+    const ordemAscendente = ref(true)
+    const snackMessage = ref('')
+    const snackType = ref('') // 'success' ou 'error'
+    const showSnack = ref(false)
+    let snackTimeout = null
 
     const buscarViagens = async (filtros = {}) => {
         try {
-            loading.value = true
+            LoadingTable.value = true
 
             const token = localStorage.getItem('token')
 
@@ -244,9 +359,33 @@
         } catch (error) {
             console.error('Erro ao buscar viagens:', error)
         } finally {
-            loading.value = false
+            LoadingTable.value = false
         }
     }
+
+    const ordenarPor = (campo) => {
+        if (campoOrdenacao.value === campo) {
+            ordemAscendente.value = !ordemAscendente.value
+        } else {
+            campoOrdenacao.value = campo
+            ordemAscendente.value = true
+        }
+
+        viagens.value.sort((a, b) => {
+            let aCampo = a[campo]
+            let bCampo = b[campo]
+
+            if (campo.includes('data')) {
+                aCampo = new Date(aCampo)
+                bCampo = new Date(bCampo)
+            }
+
+            if (aCampo < bCampo) return ordemAscendente.value ? -1 : 1
+            if (aCampo > bCampo) return ordemAscendente.value ? 1 : -1
+            return 0
+        })
+    }
+
 
     // Carregar cidades do IBGE
     const carregarCidades = async () => {
@@ -307,26 +446,54 @@
 
             const token = localStorage.getItem('token')
             await axios.patch(`${import.meta.env.VITE_API_URL}/api/viagens/${id}/status`, {
-            status: novoStatus
+                status: novoStatus
             }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             })
 
-            // Atualiza a lista após alteração se quiser
             await buscarViagens()
+
+            exibirSnack('Status atualizado com sucesso!', 'success')
         } catch (error) {
+            await buscarViagens()
             console.error('Erro ao atualizar status:', error)
+            exibirSnack(error.response?.data?.message, 'error')
         } finally {
             loading.value = false
         }
     }
 
+    const exibirSnack = (mensagem, tipo) => {
+        if (snackTimeout) {
+            clearTimeout(snackTimeout)
+        }
+
+        snackMessage.value = mensagem
+        snackType.value = tipo
+        showSnack.value = true
+
+        snackTimeout = setTimeout(() => {
+            showSnack.value = false
+        }, 5000)
+    }
+
+
     const abrirTicket = (viagem) => {
         viagemSelecionada.value = viagem
         showTicket.value = true
     }
+
+    const isDataIdaPassada = (dataIda) => {
+        if (!dataIda) return false
+        const hoje = new Date()
+        const data = new Date(dataIda)
+        hoje.setHours(0, 0, 0, 0)
+        data.setHours(0, 0, 0, 0)
+        return data < hoje
+    }
+
   
     const formatarData = (dataStr) => {
         const [ano, mes, dia] = dataStr.split('-')

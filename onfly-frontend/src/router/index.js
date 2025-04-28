@@ -4,6 +4,7 @@ import mitt from 'mitt'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import { useAuthStore } from '@/stores/auth'
 
 // Crie as rotas conforme seu app
 const routes = [
@@ -17,6 +18,25 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
+
+  const isAuthenticated = !!auth.getToken()
+
+  if (to.path === '/dashboard' && !isAuthenticated) {
+    // Não está logado e tentou acessar dashboard
+    return next('/login')
+  }
+
+  if ((to.path === '/login' || to.path === '/register') && isAuthenticated) {
+    // Já está logado e tentou acessar login/register
+    return next('/dashboard')
+  }
+
+  // Em qualquer outro caso, libera normalmente
+  return next()
 })
 
 // Crie um event bus (podemos exportá-lo para que outros componentes o usem)
