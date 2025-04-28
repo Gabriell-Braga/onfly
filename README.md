@@ -79,6 +79,7 @@ Dentro do container, execute:
 ```bash
 php artisan jwt:secret
 ```
+Confirme o override.
 
 ### 5. Limpar e recachear as configurações do Laravel
 
