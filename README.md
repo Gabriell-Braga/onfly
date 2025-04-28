@@ -1,14 +1,18 @@
 # ✈️ Onfly - Sistema de Gestão de Pedidos de Viagem
 
+
+
 ## 🚀 Como rodar o projeto (com Docker)
 
 Este projeto utiliza **Docker** para facilitar a instalação e execução.  
 Mesmo que você não tenha experiência prévia, é só seguir os passos abaixo:
 
+
 ## 🛠️ Requisitos
 
 - Ter o **Docker** instalado no computador.
 - Ter o **Docker Compose** disponível (geralmente já vem junto com o Docker Desktop).
+
 
 ## 📦 Instruções para executar
 
@@ -81,14 +85,6 @@ Essa variável controla se o banco de dados deve ser resetado:
 docker-compose down
 ```
 
-Ótimo!  
-Vou fazer exatamente o que você pediu:  
-- Instruções claras para rodar os testes (pensadas para colocar no seu README)
-- E depois uma **explicação resumida** sobre **o que cada teste cobre** no seu projeto.
-
-Aqui está:
-
----
 
 ## 🧪 Como rodar os testes unitários do Back-end
 
@@ -109,6 +105,7 @@ php artisan test
 ```
 
 ✅ O sistema irá rodar automaticamente todos os testes unitários e exibir o resultado diretamente no terminal.
+
 
 ## 🧠 Sobre os Testes Implementados
 
@@ -152,6 +149,7 @@ Os testes cobrem as funcionalidades mais importantes do sistema de viagens:
 
 ✅ Com essa bateria de testes, garantimos que a aplicação está funcionando corretamente em seus principais fluxos de autenticação, registro de pedidos, notificações e regras de permissão.  
 ✅ Também asseguramos que erros críticos de segurança (como acesso não autorizado) estão sendo tratados.
+
 
 ## 🛫 Funcionamento do Sistema
 
@@ -201,10 +199,6 @@ O sistema já possui um **usuário administrador** criado automaticamente para f
    - A plataforma é totalmente responsiva, adaptando-se perfeitamente a celulares, tablets e desktops.
    - Foram implementadas animações de transição entre telas, animações no cabeçalho ao scrollar, animações de ping para novos alertas e spinners de carregamento, proporcionando uma experiência moderna, agradável e intuitiva.
 
-### 📋 Observação Importante
-
-- Apenas usuários com permissão de administrador (`is_admin = true`) conseguem **aprovar** ou **cancelar** pedidos.
-- Usuários comuns podem apenas **criar** e **visualizar** seus próprios pedidos.
 
 ## 🧠 Considerações Técnicas do Projeto
 
@@ -225,7 +219,9 @@ Durante o desenvolvimento deste projeto, algumas decisões técnicas foram tomad
   - **Animação no header** durante o scroll, proporcionando uma navegação mais fluida e moderna.
   - **Animações de "ping"** para destacar elementos dinâmicos e novos alertas de notificação.
   - **Loading spinners** para indicar carregamentos de forma clara e manter o usuário informado sobre as ações assíncronas em andamento.
+
   Esses elementos visam não apenas embelezar a aplicação, mas também criar uma interação **mais fluida, informativa e agradável**, melhorando significativamente a percepção de qualidade da plataforma.
+
 
 ## 🗂️ Organização do Repositório GitHub
 
