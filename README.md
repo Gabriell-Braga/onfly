@@ -23,7 +23,7 @@ Mesmo que você não tenha experiência prévia, é só seguir os passos abaixo:
 Abra o terminal e clone o projeto:
 
 ```bash
-git clone https://github.com/seu-usuario/onfly.git
+git clone https://github.com/Gabriell-Braga/onfly.git
 ```
 
 Depois entre na pasta do projeto:
