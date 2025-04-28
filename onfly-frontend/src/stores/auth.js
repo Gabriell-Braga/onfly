@@ -8,25 +8,21 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   actions: {
-    // Salvar o token
     setToken(token) {
       this.token = token
       localStorage.setItem('token', token)
       this.fetchUser()
     },
 
-    // Salvar as informações do usuário
     setUser(user) {
       this.user = user
       localStorage.setItem('user', JSON.stringify(user))
     },
 
-    // Retornar token
     getToken() {
       return this.token
     },
 
-    // Retornar usuário
     getUser() {
       return this.user
     },
@@ -35,17 +31,14 @@ export const useAuthStore = defineStore('auth', {
       return this.user?.is_admin === true
     },
 
-    // Logout
     async logout() {
-      try{
+      try {
         await axios.post(`${import.meta.env.VITE_API_URL}/api/logout`, {}, {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
+          headers: { Authorization: `Bearer ${this.token}` },
         })
-      }catch(err){
+      } catch (err) {
         console.error('Erro ao fazer logout:', err)
-      }finally{
+      } finally {
         this.token = ''
         this.user = null
         localStorage.removeItem('token')
@@ -53,15 +46,12 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Buscar informações atualizadas do usuário (me)
     async fetchUser() {
       if (!this.token) return
 
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/me`, {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
+          headers: { Authorization: `Bearer ${this.token}` },
         })
         this.setUser(data)
       } catch (err) {
@@ -69,21 +59,43 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Fazer refresh do token
     async refreshToken() {
       if (!this.token) return
 
       try {
         const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/refresh`, {}, {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
+          headers: { Authorization: `Bearer ${this.token}` },
         })
         this.setToken(data.access_token)
       } catch (err) {
         console.error('Erro ao fazer refresh do token:', err)
         this.logout()
       }
+    },
+
+    /** 🔥 INTERCEPTOR AUTOMÁTICO 🔥 */
+    configurarInterceptor() {
+      axios.interceptors.response.use(
+        response => response,
+        async error => {
+          const originalRequest = error.config
+
+          if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true
+
+            try {
+              await this.refreshToken()
+              originalRequest.headers['Authorization'] = `Bearer ${this.getToken()}`
+              return axios(originalRequest)
+            } catch (refreshError) {
+              await this.logout()
+              window.location.href = '/login'
+            }
+          }
+
+          return Promise.reject(error)
+        }
+      )
     }
   },
 })

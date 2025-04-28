@@ -8,5 +8,9 @@
 </template>
 
 <script setup>
-import RouteTransition from '@/components/RouteTransition.vue'
+  import RouteTransition from '@/components/RouteTransition.vue'
+  import { useAuthStore } from '@/stores/auth'
+
+  const auth = useAuthStore()
+  auth.configurarInterceptor()
 </script>

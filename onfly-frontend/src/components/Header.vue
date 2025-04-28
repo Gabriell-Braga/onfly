@@ -36,7 +36,11 @@
               </button>
 
               <!-- Popup de notificações -->
-              <div v-if="showNotifications" class="absolute right-0 mt-2 w-[380px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 notificacoes-popup">
+              <div 
+                v-if="showNotifications" 
+                class="absolute mt-2 w-[90vw] max-w-[380px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 notificacoes-popup
+                      right-0 md:right-0 md:translate-x-0 left-1/2 -translate-x-1/2 md:left-auto md:transform-none"
+              >
                 <div v-if="notifications.length > 0" class="max-h-80 overflow-y-auto">
                   <div
                     v-for="notification in notifications"
