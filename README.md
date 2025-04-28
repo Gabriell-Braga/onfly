@@ -87,7 +87,17 @@ Ainda dentro do container execute:
 
 ```bash
 php artisan config:clear
+```
+
+Depois:
+
+```bash
 php artisan cache:clear
+```
+
+E por último:
+
+```bash
 php artisan config:cache
 ```
 
