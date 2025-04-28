@@ -32,10 +32,19 @@ Depois entre na pasta do projeto com o seguinte comando:
 cd onfly
 ```
 
-### 2. Configure variáveis de ambiente (opcional)
+### 2. Configure variáveis de ambiente
 
-O projeto já possui um arquivo `.env` padrão para funcionamento local.  
-Se quiser alterar configurações (por exemplo, senha do banco de dados), ajuste os arquivos `.env` nos diretórios `onfly-backend` e `onfly-frontend`.
+Faça a cópia do arquivo .env.example para o .env:
+
+```bash
+cp onfly-backend/.env.example onfly-backend/.env
+```
+
+Se estiver usando PowerShell, use:
+
+```bash
+Copy-Item onfly-backend/.env.example onfly-backend/.env
+```
 
 ### 3. Suba o projeto com Docker
 
@@ -57,7 +66,31 @@ Se quiser iniciar o projeto mantendo os dados anteriores:
 $env:DB_REFRESH="false"; docker-compose up --build
 ```
 
-### 4. Acessando a aplicação
+### 4. Configure variáveis de ambiente
+
+Abra outro terminal de comandos enquanto o projeto estiver rodando com o Docker e execute o seguinte comando:
+
+```bash
+docker exec -it onfly-backend bash
+```
+
+Dentro do container, execute:
+
+```bash
+php artisan jwt:secret
+```
+
+### 5. Limpar e recachear as configurações do Laravel
+
+Ainda dentro do container execute:
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan config:cache
+```
+
+### 6. Acessando a aplicação
 
 Depois que tudo estiver rodando, acesse:
 
@@ -67,7 +100,7 @@ Depois que tudo estiver rodando, acesse:
 | Front-end         | [http://localhost:4173](http://localhost:4173) |
 | Banco de dados    | (MySQL interno no Docker, já configurado)      |
 
-### 5. O que é `$env:DB_REFRESH`?
+### 7. O que é `$env:DB_REFRESH`?
 
 Essa variável controla se o banco de dados deve ser resetado:
 
@@ -77,7 +110,7 @@ Essa variável controla se o banco de dados deve ser resetado:
 **Importante:**  
 - O back-end detecta esse valor para decidir se roda as migrações novamente ao iniciar.
 
-### 6. Observações finais
+### 8. Observações finais
 
 - A primeira execução pode demorar um pouco, pois o Docker precisará baixar as imagens e instalar dependências.
 - Aguarde todos os containers estarem prontos no terminal antes de acessar no navegador.
