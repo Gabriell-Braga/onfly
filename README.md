@@ -2,6 +2,9 @@
 
 
 
+
+
+
 ## 🚀 Como rodar o projeto (com Docker)
 
 Este projeto utiliza **Docker** para facilitar a instalação e execução.  
