@@ -420,7 +420,6 @@
 
     // Aplicar filtros
     const aplicarFiltros = async () => {
-        LoadingTable.value = true
 
         if(filtroCidade.value) {
             const cidadeValida = cidades.value.some(cidade => {
@@ -434,6 +433,7 @@
         }
 
         error.value = null
+        LoadingTable.value = true
 
         filtros.value = {
             destino: filtroCidade.value || '',
