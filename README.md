@@ -1,7 +1,6 @@
 # ✈️ Onfly - Sistema de Gestão de Pedidos de Viagem
 <br>
 <br>
-<br>
 
 ## 🚀 Como rodar o projeto (com Docker)
 
@@ -15,6 +14,7 @@ Mesmo que você não tenha experiência prévia, é só seguir os passos abaixo:
 - Ter o **Docker** instalado no computador.
 - Ter o **Docker Compose** disponível (geralmente já vem junto com o Docker Desktop).
 
+<br>
 
 ## 📦 Instruções para executar
 
@@ -87,6 +87,7 @@ Essa variável controla se o banco de dados deve ser resetado:
 docker-compose down
 ```
 
+<br>
 
 ## 🧪 Como rodar os testes unitários do Back-end
 
@@ -108,6 +109,7 @@ php artisan test
 
 ✅ O sistema irá rodar automaticamente todos os testes unitários e exibir o resultado diretamente no terminal.
 
+<br>
 
 ## 🧠 Sobre os Testes Implementados
 
@@ -152,6 +154,7 @@ Os testes cobrem as funcionalidades mais importantes do sistema de viagens:
 ✅ Com essa bateria de testes, garantimos que a aplicação está funcionando corretamente em seus principais fluxos de autenticação, registro de pedidos, notificações e regras de permissão.  
 ✅ Também asseguramos que erros críticos de segurança (como acesso não autorizado) estão sendo tratados.
 
+<br>
 
 ## 🛫 Funcionamento do Sistema
 
@@ -201,6 +204,7 @@ O sistema já possui um **usuário administrador** criado automaticamente para f
    - A plataforma é totalmente responsiva, adaptando-se perfeitamente a celulares, tablets e desktops.
    - Foram implementadas animações de transição entre telas, animações no cabeçalho ao scrollar, animações de ping para novos alertas e spinners de carregamento, proporcionando uma experiência moderna, agradável e intuitiva.
 
+<br>
 
 ## 🧠 Considerações Técnicas do Projeto
 
@@ -224,6 +228,7 @@ Durante o desenvolvimento deste projeto, algumas decisões técnicas foram tomad
 
   Esses elementos visam não apenas embelezar a aplicação, mas também criar uma interação **mais fluida, informativa e agradável**, melhorando significativamente a percepção de qualidade da plataforma.
 
+<br>
 
 ## 🗂️ Organização do Repositório GitHub
 
