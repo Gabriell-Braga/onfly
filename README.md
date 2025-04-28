@@ -43,7 +43,7 @@ Agora escolha uma das opções de comando abaixo:
 
 #### ➡️ Subir o projeto **zerando o banco de dados**
 
-Se você quiser limpar o banco e começar do zero:
+Se você quiser limpar o banco e começar do zero (⚠️ RODE ESSA NA PRIMEIRA VEZ EXECUTANDO O PROJETO):
 
 ```bash
 $env:DB_REFRESH="true"; docker-compose up --build
@@ -71,8 +71,8 @@ Depois que tudo estiver rodando, acesse:
 
 Essa variável controla se o banco de dados deve ser resetado:
 
-- `$env:DB_REFRESH="true"` → Apaga e recria as tabelas (útil para testes).
-- `$env:DB_REFRESH="false"` → Mantém o banco atual.
+- `$env:DB_REFRESH="true"` → Apaga e recria as tabelas (útil para testes), executando os migrations.
+- `$env:DB_REFRESH="false"` → Mantém o banco atual, pulando a execução dos migrations para evitar perda de dados.
 
 **Importante:**  
 - O back-end detecta esse valor para decidir se roda as migrações novamente ao iniciar.
