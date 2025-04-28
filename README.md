@@ -1,15 +1,14 @@
 # ✈️ Onfly - Sistema de Gestão de Pedidos de Viagem
-
-
-
-
-
+<br>
+<br>
+<br>
 
 ## 🚀 Como rodar o projeto (com Docker)
 
 Este projeto utiliza **Docker** para facilitar a instalação e execução.  
 Mesmo que você não tenha experiência prévia, é só seguir os passos abaixo:
 
+<br>
 
 ## 🛠️ Requisitos
 
