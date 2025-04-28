@@ -5,8 +5,6 @@ services:
     container_name: onfly-backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./onfly-backend:/var/www
     working_dir: /var/www
     command: php artisan serve --host=0.0.0.0 --port=8000
     environment:
